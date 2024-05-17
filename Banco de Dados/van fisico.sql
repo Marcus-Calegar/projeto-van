@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `projetoVan`.`Motorista` (
   `mensalidade` DECIMAL(3,2) NOT NULL,
   `dataNascimento` DATETIME NOT NULL,
   `email` VARCHAR(100) NOT NULL,
-  `senha` VARCHAR(32) NOT NULL,
+  `senha` VARCHAR(60) NOT NULL,
   PRIMARY KEY (`idMotorista`))
 ENGINE = InnoDB;
 
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `projetoVan`.`Responsavel` (
   `telefone` CHAR(11) NOT NULL,
   `dataNascimento` DATE NOT NULL,
   `email` VARCHAR(100) NOT NULL,
-  `senha` VARCHAR(32) NOT NULL,
+  `senha` VARCHAR(60) NOT NULL,
   PRIMARY KEY (`idResponsavel`))
 ENGINE = InnoDB;
 
