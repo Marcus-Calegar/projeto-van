@@ -11,7 +11,6 @@ class MotoristaController
     private $email;
     private $senha;
 
-    // Getters
     public function getIdMotorista()
     {
         return $this->idMotorista;
@@ -52,10 +51,9 @@ class MotoristaController
         return $this->senha;
     }
 
-    // Setters
     public function setIdMotorista($idMotorista)
     {
-        if (!is_int($idMotorista)) {
+        if (empty($idMotorista)) {
             throw new InvalidArgumentException("Id Motorista inválido: $idMotorista");
         }
         $this->idMotorista = $idMotorista;
@@ -87,10 +85,11 @@ class MotoristaController
 
     public function setMensalidade($mensalidade)
     {
-        if ($mensalidade < 0) {
+        if ($mensalidade < 0 || empty($mensalidade)) {
             throw new InvalidArgumentException("Mensalidade inválida: $mensalidade");
         }
-        $this->mensalidade = $mensalidade;
+
+        $this->mensalidade = floatval($mensalidade);
     }
 
     public function setDataNascimento($dataNascimento)
