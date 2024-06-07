@@ -24,7 +24,7 @@ include "../Layout/navmenu.php";
     <div class="d-flex flex-wrap justify-content-center align-items-center">
         <div class="m-5">
             <h4 class="mb-2">Entrar em uma conta</h4>
-            <form class="d-flex flex-column align-items-center" action="/model/Motorista.php" method="post">
+            <form class="d-flex flex-column align-items-center" action="/model/Responsavel.php" method="POST">
                 <input type="text" hidden name="action" value="login">
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Email</label>

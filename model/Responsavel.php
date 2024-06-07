@@ -1,6 +1,6 @@
 <?php
 require_once 'Conexoes.php';
-require_once '../Controller/ResponsavelController.php';
+require_once __DIR__ . '/../Controller/ResponsavelController.php';
 class Responsavel
 {
     private function ValidarPOST($post)
@@ -16,7 +16,6 @@ class Responsavel
     {
         try {
             $conn = new Conexao();
-            $conn->__construct();
             $responsavel = new ResponsavelController();
             $validar = new Responsavel();
 
@@ -55,6 +54,66 @@ class Responsavel
             $conn = null;
         }
     }
+    public function Logar()
+    {
+        try {
+            $conn = new Conexao();
+            $responsavel = new ResponsavelController();
+            $validar = new Responsavel();
+            if ($validar->ValidarPOST($_POST)) {
+                $responsavel->setEmail($_POST['email']);
+                $responsavel->setSenha($_POST['senha']);
+            } else {
+                return false;
+            }
+            $sql = "SELECT idResponsavel, senha FROM `responsavel` WHERE email = :email";
+            $stmt = $conn->preparar($sql);
+            $email = $responsavel->getEmail();
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $responsavel->setIdResponsavel($result[0]['idResponsavel']);
+
+            $senhaCriptografada = $result[0]['senha'];
+
+            if ($stmt->rowCount() > 0) {
+                if (password_verify($_POST['senha'], $senhaCriptografada)) {
+                    return $responsavel->getIdResponsavel();
+                }
+            } else {
+                return false;
+            }
+        } catch (\PDOException $e) {
+            throw $e;
+        } finally {
+            $conn = null;
+        }
+    }
+    public function MostrarDependentes($emailLogado)
+    {
+        try {
+            $conn = new Conexao();
+            $responsavel = new ResponsavelController();
+
+            $sql = "SELECT `idAluno`, A.`nome`, A.`dataNascimento`, E.`nome` as escola, A.`senha`, A.`email` FROM `aluno` A
+                    JOIN `responsavel` as R USING (idResponsavel)
+                    JOIN `escola` as E USING (idEscola)
+                    WHERE `R`.`email` like :email";
+            $stmt = $conn->preparar($sql);
+            $email = $emailLogado;
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if ($result) {
+                return $result;
+            }
+        } catch (\PDOException $e) {
+            throw $e;
+        } finally {
+            $conn =  null;
+        }
+    }
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -63,16 +122,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         case 'inserir':
             $responsavel = new Responsavel();
             $responsavel->Inserir();
-            header('Location: ../View/Pages/AreaResponsaveis.php');
+            header('Location: ../View/Pages/AreaResponsaveis.php?Sucesso=1');
             break;
-        /*case 'login':
+        case 'login':
             $responsavel = new Responsavel();
-            
-            if ($responsavel->Logar()) {
-                header('Location: ../View/Pages/Logado.php?ID=');
+            $id = $responsavel->Logar();
+            $user = 'Responsavel';
+            if ($responsavel->Logar() != false) {
+                header('Location: ../View/Pages/Logado.php?ID=' . $id . '&User=' . $user);
             } else {
-                header('Location: ../View/Pages/AreaResponsavel.php');
+                header('Location: ../View/Pages/AreaResponsaveis.php?Erro=1');
             }
-            break; */
+            break;
     }
 }

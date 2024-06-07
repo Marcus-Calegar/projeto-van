@@ -16,7 +16,6 @@ class Motorista
     {
         try {
             $conn = new Conexao();
-            $conn->__construct();
             $motorista = new MotoristaController();
             $validar = new Motorista();
 
@@ -62,7 +61,6 @@ class Motorista
     {
         try {
             $conn = new Conexao();
-            $conn->__construct();
             $motorista = new MotoristaController();
             $validar = new Motorista();
             if ($validar->ValidarPOST($_POST)) {
@@ -79,7 +77,6 @@ class Motorista
             $stmt->execute();
             $result = $stmt->fetchAll();
             $senhaCriptografada = $result[0]['senha'];
-            $motorista->setIdMotorista($result[0]['idMotorista']);
             if ($stmt->rowCount() > 0) {
                 if (password_verify($_POST['senha'], $senhaCriptografada)) {
                     return true;
@@ -87,8 +84,8 @@ class Motorista
             } else {
                 return false;
             }
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\PDOException $e) {
+            throw $e;
         } finally {
             $conn = null;
         }

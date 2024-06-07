@@ -43,7 +43,7 @@ class ResponsavelController
 
     public function setIdResponsavel($idResponsavel)
     {
-        if (!is_int($idResponsavel)) {
+        if (empty($idResponsavel)) {
             throw new InvalidArgumentException("Id Responsável inválido: $idResponsavel");
         }
         $this->idResponsavel = $idResponsavel;
