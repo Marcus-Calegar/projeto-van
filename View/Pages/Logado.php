@@ -1,6 +1,5 @@
 <?php
 include "../Layout/navmenu.php";
-include '../../Controller/MotoristaController.php';
 include_once '../../model/Conexoes.php';
 
 $id = $_GET['ID'];
@@ -15,6 +14,8 @@ try {
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (\Throwable $th) {
     echo "Erro ao conectar ao banco de dados";
+} finally {
+    $conn = null;
 }
 ?>
 <!DOCTYPE html>
@@ -27,9 +28,105 @@ try {
 </head>
 
 <body>
-    <h3>ID: <?= $result[0]["id{$tabela}"] ?></h3>
-    <h3>Nome: <?php echo $result[0]['nome'] ?></h3>
-    <p>Voce e: <?= $tabela?></p>
+    <h3>ID: <?= $id ?></h3>
+    <h3>Nome: <?= $result[0]['nome'] ?></h3>
+    <p>Voce e: <?= $tabela ?></p>
+    <?php
+    if ($tabela == 'Responsavel') : ?>
+        <div class="text-center">
+            <h2>Cadastrar Dependente</h2>
+            <a href="CadastroALuno.php?id=<?= $id ?>" class="btn btn-primary">Cadastrar</a>
+            <div class="table-responsive-md">
+                <table class="table table-striped m-2">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Data Nascimento</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Escola</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        include_once '../../model/Responsavel.php';
+                        $responsavel = new Responsavel();
+                        $emailLogado = $result[0]['email'];
+                        $dependente = $responsavel->MostrarDependentes($emailLogado);
+                        if (!is_null($dependente) || !empty($dependente)) :
+                            foreach ($dependente as $value) :
+                        ?>
+                                <tr>
+                                    <td><?= $value['nome'] ?></td>
+                                    <td><?= $value['dataNascimento'] ?></td>
+                                    <td><?= $value['email'] ?></td>
+                                    <td><?= $value['escola'] ?></td>
+                                </tr>
+                        <?php
+                            endforeach;
+                        endif;
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <?php endif ?>
+    <?php if ($tabela == 'Motorista') : ?>
+        <div class="text-center">
+            <h2>Cadastrar Veiculo</h2>
+            <a href="CadastroVeiculo.php?id=<?= $id ?>" class="btn btn-primary">Cadastrar</a>
+            <div class="table-responsive-md">
+                <table class="table table-striped m-2">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Marca</th>
+                            <th scope="col">Modelo</th>
+                            <th scope="col">Ano</th>
+                            <th scope="col">Capacidade</th>
+                            <th scope="col">Placa</th>
+                            <th scope="col">Acoes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        include_once(__DIR__ . '/../../model/Veiculo.php');
+                        $v = new Veiculo();
+                        $veiculos = $v->MostrarVeiculos($id);
+                        if (!is_null($veiculos) || !empty($veiculos)) :
+                            $cont = 0;
+                            foreach ($veiculos as $value) :
+                                $cont = $cont + 1;
+                        ?>
+                                <tr>
+                                    <td><?= $cont ?></td>
+                                    <td><?= $value['marca'] ?></td>
+                                    <td><?= $value['modelo'] ?></td>
+                                    <td><?= $value['ano'] ?></td>
+                                    <td><?= $value['capacidade'] ?></td>
+                                    <td><?= $value['placa'] ?></td>
+                                    <td>
+                                        <form action="CadastroVeiculo.php?Update=1&id=<?= $id ?>" method="post">
+                                            <button type="submit" class="btn btn-primary">
+                                                <input type="text" value="<?= $value['idVeiculo'] ?>" name="idVeiculo" hidden>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                        <a href="CadastroVeiculo.php?Update=1&id=<?= $id ?>">
+                                        </a>
+                                    </td>
+                                </tr>
+                        <?php
+                            endforeach;
+                        endif;
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <?php endif; ?>
 </body>
 
 </html>

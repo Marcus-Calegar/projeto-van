@@ -88,7 +88,6 @@ class MotoristaController
         if ($mensalidade < 0 || empty($mensalidade)) {
             throw new InvalidArgumentException("Mensalidade inválida: $mensalidade");
         }
-
         $this->mensalidade = floatval($mensalidade);
     }
 

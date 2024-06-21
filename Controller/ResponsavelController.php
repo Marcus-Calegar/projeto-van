@@ -43,7 +43,7 @@ class ResponsavelController
 
     public function setIdResponsavel($idResponsavel)
     {
-        if (!is_int($idResponsavel)) {
+        if (empty($idResponsavel)) {
             throw new InvalidArgumentException("Id Responsável inválido: $idResponsavel");
         }
         $this->idResponsavel = $idResponsavel;
@@ -84,7 +84,7 @@ class ResponsavelController
     public function setSenha($senha)
     {
         if (empty($senha)) {
-            return throw new InvalidArgumentException("Senha inválida: $senha");
+            throw new InvalidArgumentException("Senha inválida: $senha");
         }
         $this->senha = password_hash($senha, PASSWORD_DEFAULT);
     }
