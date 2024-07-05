@@ -94,7 +94,6 @@ class Responsavel
     {
         try {
             $conn = new Conexao();
-            $responsavel = new ResponsavelController();
 
             $sql = "SELECT `idAluno`, A.`nome`, A.`dataNascimento`, E.`nome` as escola, A.`senha`, A.`email` FROM `aluno` A
                     JOIN `responsavel` as R USING (idResponsavel)
@@ -111,7 +110,7 @@ class Responsavel
         } catch (\PDOException $e) {
             throw $e;
         } finally {
-            $conn =  null;
+            $conn = null;
         }
     }
 }

@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `projetoVan`.`Aluno` (
   `idResponsavel` INT NOT NULL,
   `idEscola` INT NOT NULL,
   `senha` VARCHAR(60) NOT NULL,
-  `email` VARCHAR(100) NOT NULL,
+   `email` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`idAluno`),
   INDEX `fk_Aluno_Responsavel1_idx` (`idResponsavel` ASC) VISIBLE,
   INDEX `fk_Aluno_Escola1_idx` (`idEscola` ASC) VISIBLE,

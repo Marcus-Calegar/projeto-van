@@ -17,9 +17,8 @@ class Motorista
         try {
             $conn = new Conexao();
             $motorista = new MotoristaController();
-            $validar = new Motorista();
 
-            if ($validar->ValidarPOST($_POST)) {
+            if ($this->ValidarPOST($_POST)) {
                 $motorista->setNome($_POST['nome']);
                 $motorista->setTelefone($_POST['telefone']);
                 $motorista->setCpf($_POST['cpf']);
@@ -75,11 +74,14 @@ class Motorista
             $email = $motorista->getEmail();
             $stmt->bindParam(':email', $email);
             $stmt->execute();
-            $result = $stmt->fetchAll();
+
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $motorista->setIdMotorista($result[0]['idMotorista']);
             $senhaCriptografada = $result[0]['senha'];
+            $id = $motorista->getIdMotorista();
             if ($stmt->rowCount() > 0) {
                 if (password_verify($_POST['senha'], $senhaCriptografada)) {
-                    return true;
+                    return $id;
                 }
             } else {
                 return false;
@@ -101,25 +103,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header('Location: ../View/Pages/AreaMotoristas.php');
             break;
         case 'login':
-            $motorista = new Motorista();
-            $motoristaController = new MotoristaController();
-            $conn = new Conexao();
-
-            $motoristaController->setEmail($_POST['email']);
-            $sql = "SELECT * FROM `motorista` WHERE email = :email";
-            $stmt = $conn->preparar($sql);
-            $email = $motoristaController->getEmail();
-            $stmt->bindParam(':email', $email);
-            $stmt->execute();
-            $result = $stmt->fetchAll();
-            $conn = null;
-
-            $id = $result[0]['idMotorista'];
-            $user = 'Motorista';
-            if ($motorista->Logar()) {
-                header('Location: ../View/Pages/Logado.php?ID=' . $id . '&User=' . $user);
-            } else {
-                header('Location: ../View/Pages/AreaMotoristas.php');
+            try {
+                $motorista = new Motorista();
+                $id = $motorista->Logar($_POST['email']);
+                $user = 'Motorista';
+                if ($motorista->Logar()) {
+                    header('Location: ../View/Pages/Logado.php?ID=' . $id . '&User=' . $user);
+                } else {
+                    header('Location: ../View/Pages/AreaMotoristas.php');
+                }
+            } catch (\Throwable $th) {
+                throw $th;
             }
             break;
     }

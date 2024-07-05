@@ -84,7 +84,7 @@ class ResponsavelController
     public function setSenha($senha)
     {
         if (empty($senha)) {
-            return throw new InvalidArgumentException("Senha inválida: $senha");
+            throw new InvalidArgumentException("Senha inválida: $senha");
         }
         $this->senha = password_hash($senha, PASSWORD_DEFAULT);
     }
