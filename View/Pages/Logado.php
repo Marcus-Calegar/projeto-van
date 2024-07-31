@@ -1,19 +1,18 @@
 <?php
 include "../Layout/navmenu.php";
 include_once '../../model/Conexoes.php';
-
-$id = $_GET['ID'];
-$tabela = $_GET['User'];
+session_start();
+$id = $_SESSION['id'];
+$tabela = $_SESSION['user'];
 
 try {
     $conn = new Conexao();
-    $conn->__construct();
-    $sql = "SELECT * FROM {$tabela} WHERE id{$tabela} = $id";
-    $stmt = $conn->preparar($sql);
+    $sql = "SELECT * FROM $tabela WHERE id{$tabela} = '$id'";
+    $stmt = $conn->comando($sql);
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (\Throwable $th) {
-    echo "Erro ao conectar ao banco de dados";
+    throw new PDOException('Erro ao conectar ao banco de dados ' . $th);
 } finally {
     $conn = null;
 }

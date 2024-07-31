@@ -72,11 +72,15 @@ class Aluno
             $stmt->execute();
 
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $aluno->setIdAluno($result[0]['idAluno']);
-            $senhaCriptografada = $result[0]['senha'];
             if ($stmt->rowCount() > 0) {
+                $aluno->setIdAluno($result[0]['idAluno']);
+                $id = $aluno->getIdAluno();
+                $senhaCriptografada = $result[0]['senha'];
                 if (password_verify($_POST['senha'], $senhaCriptografada)) {
-                    return $aluno->getIdAluno();
+                    session_start();
+                    $_SESSION['id'] = $id;
+                    $_SESSION['user'] = 'Aluno';
+                    return true;
                 }
             }
         } catch (\Exception $e) {
@@ -165,10 +169,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             break;
         case 'login':
             $aluno = new Aluno();
-            $id = $aluno->Logar();
-            $user = 'Aluno';
-            if ($aluno->Logar() != false) {
-                header('Location: ../View/Pages/Logado.php?ID=' . $id . '&User=' . $user);
+            if ($aluno->Logar()) {
+                header('Location: ../View/Pages/Logado.php');
             } else {
                 header('Location: ../View/Pages/AreaAluno.php?Erro=1');
             }

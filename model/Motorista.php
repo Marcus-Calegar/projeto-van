@@ -76,12 +76,15 @@ class Motorista
             $stmt->execute();
 
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $motorista->setIdMotorista($result[0]['idMotorista']);
-            $senhaCriptografada = $result[0]['senha'];
-            $id = $motorista->getIdMotorista();
             if ($stmt->rowCount() > 0) {
+                $motorista->setIdMotorista($result[0]['idMotorista']);
+                $senhaCriptografada = $result[0]['senha'];
+                $id = $motorista->getIdMotorista();
                 if (password_verify($_POST['senha'], $senhaCriptografada)) {
-                    return $id;
+                    session_start();
+                    $_SESSION['id'] = $id;
+                    $_SESSION['user'] = 'Motorista';
+                    return true;
                 }
             } else {
                 return false;
@@ -105,10 +108,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         case 'login':
             try {
                 $motorista = new Motorista();
-                $id = $motorista->Logar($_POST['email']);
-                $user = 'Motorista';
                 if ($motorista->Logar()) {
-                    header('Location: ../View/Pages/Logado.php?ID=' . $id . '&User=' . $user);
+                    header('Location: ../View/Pages/Logado.php');
                 } else {
                     header('Location: ../View/Pages/AreaMotoristas.php');
                 }

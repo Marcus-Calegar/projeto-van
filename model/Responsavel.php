@@ -73,13 +73,15 @@ class Responsavel
             $stmt->execute();
 
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $responsavel->setIdResponsavel($result[0]['idResponsavel']);
-
-            $senhaCriptografada = $result[0]['senha'];
-
             if ($stmt->rowCount() > 0) {
+                $responsavel->setIdResponsavel($result[0]['idResponsavel']);
+                $id = $responsavel->getIdResponsavel();
+                $senhaCriptografada = $result[0]['senha'];
                 if (password_verify($_POST['senha'], $senhaCriptografada)) {
-                    return $responsavel->getIdResponsavel();
+                    session_start();
+                    $_SESSION['id'] = $id;
+                    $_SESSION['user'] = 'Responsavel';
+                    return true;
                 }
             } else {
                 return false;
@@ -125,10 +127,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             break;
         case 'login':
             $responsavel = new Responsavel();
-            $id = $responsavel->Logar();
-            $user = 'Responsavel';
-            if ($responsavel->Logar() != false) {
-                header('Location: ../View/Pages/Logado.php?ID=' . $id . '&User=' . $user);
+            var_dump($responsavel->Logar());
+            if ($responsavel->Logar()) {
+                header('Location: ../View/Pages/Logado.php');
             } else {
                 header('Location: ../View/Pages/AreaResponsaveis.php?Erro=1');
             }
