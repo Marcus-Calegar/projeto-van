@@ -64,8 +64,6 @@ class Aluno
             if ($validar->ValidarPOST($_POST)) {
                 $aluno->setEmail($_POST['email']);
                 $aluno->setSenha($_POST['senha']);
-            } else {
-                return false;
             }
             $sql = "SELECT idAluno, senha FROM `aluno` WHERE email = :email";
             $stmt = $conn->preparar($sql);
@@ -80,11 +78,9 @@ class Aluno
                 if (password_verify($_POST['senha'], $senhaCriptografada)) {
                     return $aluno->getIdAluno();
                 }
-            } else {
-                return false;
             }
-        } catch (\PDOException $e) {
-            throw $e;
+        } catch (\Exception $e) {
+            throw new $e;
         } finally {
             $conn = null;
         }
@@ -128,15 +124,20 @@ class Aluno
                 $aluno->setIdAluno($data['idAluno']);
                 $aluno->setidEscola($data['idEscola']);
                 $aluno->setEmail($data['email']);
-                $aluno->setSenha($data['senha']);
+                if (isset($data['ModificarSenha']))
+                    $aluno->setSenha($data['senha']);
             }
-            $stmt = $conn->preparar("UPDATE Aluno SET nome = :nome, dataNascimento = :dataNascimento, idEscola = :escola, email = :email, senha = :senha WHERE idResponsavel = :idResponsavel AND idAluno = :idAluno");
+            if (isset($data['ModificarSenha'])) {
+                $stmt = $conn->preparar("UPDATE Aluno SET nome = :nome, dataNascimento = :dataNascimento, idEscola = :escola, email = :email, senha = :senha WHERE idResponsavel = :idResponsavel AND idAluno = :idAluno");
+                $senha = $aluno->getSenha();
+                $stmt->bindParam(':senha', $senha);
+            } else
+                $stmt = $conn->preparar("UPDATE Aluno SET nome = :nome, dataNascimento = :dataNascimento, idEscola = :escola, email = :email WHERE idResponsavel = :idResponsavel AND idAluno = :idAluno");
 
             $nome = $aluno->getNome();
             $dataNascimento = $aluno->getDataNascimento();
             $escola = $aluno->getIdEscola();
             $email = $aluno->getEmail();
-            $senha = $aluno->getSenha();
             $idResponsavel = $aluno->getIdResponsavel();
             $idAluno = $aluno->getIdAluno();
 
@@ -146,7 +147,6 @@ class Aluno
             $stmt->bindParam(':idAluno', $idAluno);
             $stmt->bindParam(':escola', $escola);
             $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':senha', $senha);
             $stmt->execute();
         } catch (\Exception $e) {
             throw $e;

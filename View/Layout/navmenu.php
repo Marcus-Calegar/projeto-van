@@ -42,8 +42,8 @@
                     </ul>
                     <hr>
                     <h5>Pesquisar escolas</h5>
-                    <form class="d-flex mt-3" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Pesquisar..." aria-label="Search">
+                    <form class="d-flex mt-3" method="get" action="/View/Pages/Escolas.php" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Pesquisar..." aria-label="Search" name="escola">
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
                 </div>

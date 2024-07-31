@@ -95,9 +95,15 @@ try {
                     <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp" value="<?= $valor['email'] ?>">
                 </div>
                 <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label">Senha</label>
-                    <input type="password" class="form-control" name="senha" id="exampleInputPassword1" value="<?= $valor['senha'] ?>">
-
+                    <input type="checkbox" id="ModificarSenha" name="ModificarSenha">
+                    <label for="ModificarSenha">Alterar Senha</label>
+                    <div id="DivSenha" style="display: none;">
+                        <label class="form-label">Senha</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" name="senha" id="Senha" disabled>
+                            <button class="btn btn-outline-secondary" id="BtnMostrarSenha" type="button">Mostrar</button>
+                        </div>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Enviar</button>
             </form>
@@ -105,6 +111,26 @@ try {
         endforeach;
     endif;
     ?>
+    <script>
+        document.querySelector("#ModificarSenha").addEventListener('change', function() {
+            if (this.checked) {
+                document.querySelector("#DivSenha").style.display = "block";
+                document.querySelector('#Senha').disabled = false;
+            } else {
+                document.querySelector("#DivSenha").style.display = "none";
+                document.querySelector('#Senha').disabled = true;
+            }
+        });
+
+        document.querySelector('#BtnMostrarSenha').addEventListener('click', function() {
+            let senha = document.querySelector('#Senha');
+            if (senha.type === "password") {
+                senha.type = "text";
+            } else {
+                senha.type = "password";
+            }
+        });
+    </script>
 </body>
 
 </html>
