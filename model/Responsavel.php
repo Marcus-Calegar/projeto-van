@@ -54,21 +54,14 @@ class Responsavel
             $conn = null;
         }
     }
-    public function Logar()
+    public function Logar($email, $senha)
     {
         try {
             $conn = new Conexao();
             $responsavel = new ResponsavelController();
-            $validar = new Responsavel();
-            if ($validar->ValidarPOST($_POST)) {
-                $responsavel->setEmail($_POST['email']);
-                $responsavel->setSenha($_POST['senha']);
-            } else {
-                return false;
-            }
+
             $sql = "SELECT idResponsavel, senha FROM `responsavel` WHERE email = :email";
             $stmt = $conn->preparar($sql);
-            $email = $responsavel->getEmail();
             $stmt->bindParam(':email', $email);
             $stmt->execute();
 
@@ -77,7 +70,7 @@ class Responsavel
                 $responsavel->setIdResponsavel($result[0]['idResponsavel']);
                 $id = $responsavel->getIdResponsavel();
                 $senhaCriptografada = $result[0]['senha'];
-                if (password_verify($_POST['senha'], $senhaCriptografada)) {
+                if (password_verify($senha, $senhaCriptografada)) {
                     session_start();
                     $_SESSION['id'] = $id;
                     $_SESSION['user'] = 'Responsavel';
@@ -124,15 +117,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $responsavel = new Responsavel();
             $responsavel->Inserir();
             header('Location: ../View/Pages/AreaResponsaveis.php?Sucesso=1');
-            break;
-        case 'login':
-            $responsavel = new Responsavel();
-            var_dump($responsavel->Logar());
-            if ($responsavel->Logar()) {
-                header('Location: ../View/Pages/Logado.php');
-            } else {
-                header('Location: ../View/Pages/AreaResponsaveis.php?Erro=1');
-            }
             break;
     }
 }

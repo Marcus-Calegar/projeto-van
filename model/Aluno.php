@@ -55,19 +55,14 @@ class Aluno
             $conn = null;
         }
     }
-    public function Logar()
+    public function Logar($email, $senha)
     {
         try {
             $conn = new Conexao();
             $aluno = new AlunoController();
-            $validar = new Aluno();
-            if ($validar->ValidarPOST($_POST)) {
-                $aluno->setEmail($_POST['email']);
-                $aluno->setSenha($_POST['senha']);
-            }
+
             $sql = "SELECT idAluno, senha FROM `aluno` WHERE email = :email";
             $stmt = $conn->preparar($sql);
-            $email = $aluno->getEmail();
             $stmt->bindParam(':email', $email);
             $stmt->execute();
 
@@ -76,7 +71,7 @@ class Aluno
                 $aluno->setIdAluno($result[0]['idAluno']);
                 $id = $aluno->getIdAluno();
                 $senhaCriptografada = $result[0]['senha'];
-                if (password_verify($_POST['senha'], $senhaCriptografada)) {
+                if (password_verify($senha, $senhaCriptografada)) {
                     session_start();
                     $_SESSION['id'] = $id;
                     $_SESSION['user'] = 'Aluno';
@@ -167,18 +162,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $aluno->Inserir();
             header('Location: ../View/Pages/AreaAluno.php?Sucesso=1');
             break;
-        case 'login':
-            $aluno = new Aluno();
-            if ($aluno->Logar()) {
-                header('Location: ../View/Pages/Logado.php');
-            } else {
-                header('Location: ../View/Pages/AreaAluno.php?Erro=1');
-            }
-            break;
         case 'deletar':
             $aluno = new Aluno();
             $aluno->DeletarAluno($_POST['idAluno']);
-            header('Location: ../index.php?cod=3');
+            header('Location: ../View/Pages/Logado.php?cod=3');
             break;
         case 'atualizar':
             $aluno = new Aluno();

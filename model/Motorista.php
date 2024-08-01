@@ -56,31 +56,23 @@ class Motorista
             $conn = null;
         }
     }
-    public function Logar()
+    public function Logar($email, $senha)
     {
         try {
             $conn = new Conexao();
             $motorista = new MotoristaController();
-            $validar = new Motorista();
-            if ($validar->ValidarPOST($_POST)) {
-                $motorista->setEmail($_POST['email']);
-                $motorista->setSenha($_POST['senha']);
-            } else {
-                return false;
-            }
 
             $sql = "SELECT * FROM `motorista` WHERE email = :email";
             $stmt = $conn->preparar($sql);
-            $email = $motorista->getEmail();
             $stmt->bindParam(':email', $email);
             $stmt->execute();
-
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
             if ($stmt->rowCount() > 0) {
                 $motorista->setIdMotorista($result[0]['idMotorista']);
                 $senhaCriptografada = $result[0]['senha'];
                 $id = $motorista->getIdMotorista();
-                if (password_verify($_POST['senha'], $senhaCriptografada)) {
+                if (password_verify($senha, $senhaCriptografada)) {
                     session_start();
                     $_SESSION['id'] = $id;
                     $_SESSION['user'] = 'Motorista';
@@ -104,18 +96,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $motorista = new Motorista();
             $motorista->Inserir();
             header('Location: ../View/Pages/AreaMotoristas.php');
-            break;
-        case 'login':
-            try {
-                $motorista = new Motorista();
-                if ($motorista->Logar()) {
-                    header('Location: ../View/Pages/Logado.php');
-                } else {
-                    header('Location: ../View/Pages/AreaMotoristas.php');
-                }
-            } catch (\Throwable $th) {
-                throw $th;
-            }
             break;
     }
 }
