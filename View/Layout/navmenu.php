@@ -29,14 +29,16 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">Suporte</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/View/Pages/Login.php">Login</a>
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Area restrita
+                                Area de cadastro
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/View/Pages/AreaMotoristas.php">Motoristas</a></li>
-                                <li><a class="dropdown-item" href="/View/Pages/AreaResponsaveis.php">Responsável</a></li>
-                                <li><a class="dropdown-item" href="/View/Pages/AreaAluno.php">Alunos</a></li>
+                                <li><a class="dropdown-item" href="/View/Pages/CadastroMotorista.php">Motoristas</a></li>
+                                <li><a class="dropdown-item" href="/View/Pages/CadastroResponsavel.php">Responsável</a></li>
                             </ul>
                         </li>
                     </ul>

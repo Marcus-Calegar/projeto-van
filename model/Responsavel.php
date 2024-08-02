@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         case 'inserir':
             $responsavel = new Responsavel();
             $responsavel->Inserir();
-            header('Location: ../View/Pages/AreaResponsaveis.php?Sucesso=1');
+            header('Location: ../View/Pages/Logado.php?Sucesso=1');
             break;
     }
 }

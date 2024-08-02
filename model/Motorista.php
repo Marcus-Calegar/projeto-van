@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         case 'inserir':
             $motorista = new Motorista();
             $motorista->Inserir();
-            header('Location: ../View/Pages/AreaMotoristas.php');
+            header('Location: ../View/Pages/Logado.php');
             break;
     }
 }

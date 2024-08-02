@@ -160,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         case 'inserir':
             $aluno = new Aluno();
             $aluno->Inserir();
-            header('Location: ../View/Pages/AreaAluno.php?Sucesso=1');
+            header('Location: ../View/Pages/Logado.php?Sucesso=1');
             break;
         case 'deletar':
             $aluno = new Aluno();
@@ -170,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         case 'atualizar':
             $aluno = new Aluno();
             $aluno->Atualizar($_POST);
-            header('Location: ../View/Pages/AreaAluno.php?Sucesso=1');
+            header('Location: ../View/Pages/Logado.php?Sucesso=1');
             break;
     }
 }

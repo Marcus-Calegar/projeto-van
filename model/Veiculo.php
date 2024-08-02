@@ -137,17 +137,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         case 'inserir':
             $veiculo = new Veiculo();
             $veiculo->Inserir();
-            header('Location: ../View/Pages/AreaMotoristas.php?cod=1');
+            header('Location: ../View/Pages/Logado.php?Sucesso=1');
             break;
         case 'atualizar':
             $veiculo = new Veiculo();
             $veiculo->Atualizar();
-            header('Location: ../View/Pages/AreaMotoristas.php?cod=2');
+            header('Location: ../View/Pages/Logado.php?Sucesso=1');
             break;
         case 'deletar':
             $veiculo = new Veiculo();
             $veiculo->DeletarVeiculo($_POST['idVeiculo']);
-            header('Location: ../View/Pages/AreaMotoristas.php?cod=3');
+            header('Location: ../View/Pages/Logado.php?Sucesso=1');
             break;
     }
 }
