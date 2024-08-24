@@ -108,6 +108,20 @@ class Responsavel
             $conn = null;
         }
     }
+    public function EncontrarResponsavel($id)
+    {
+        try {
+            $conn = new Conexao();
+            $stmt = $conn->comando('SELECT * FROM Responsavel WHERE idResponsavel = ' . $id);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } catch (\Throwable $th) {
+            throw $th;
+        } finally {
+            $conn = null;
+        }
+    }
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -116,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         case 'inserir':
             $responsavel = new Responsavel();
             $responsavel->Inserir();
-            header('Location: ../View/Pages/Logado.php?Sucesso=1');
+            header('Location: ../View/Pages/Login.php');
             break;
     }
 }

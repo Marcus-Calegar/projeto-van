@@ -1,5 +1,4 @@
 <?php
-var_dump($_POST);
 class Login
 {
     public function Logar()
@@ -25,11 +24,23 @@ class Login
         }
         return false;
     }
+    public function LogOut()
+    {
+        session_start();
+        session_unset();
+        session_destroy();
+        header("Location: ../../index.php");
+    }
 }
-
 $log = new Login();
-if ($log->Logar()) {
-    header("Location: ../View/Pages/Logado.php");
+if (!isset($_GET['LogOut'])) {
+    if (isset($_POST['LogIn'])) {
+        if ($log->Logar()) {
+            unset($_POST['LogIn']);
+            $_SESSION['ativa'] = true;
+            header("Location: ../View/Pages/Logado.php");
+        }
+    }
 } else {
-    header("Location: ../index.php");
+    $log->LogOut();
 }

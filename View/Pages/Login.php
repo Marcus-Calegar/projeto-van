@@ -24,6 +24,7 @@ include "../Layout/navmenu.php";
                     </select>
                 </div>
                 <input type="text" name="User" id="UserType" required hidden>
+                <input type="text" name="LogIn" value="LogIn" hidden>
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Email</label>
                     <input required type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email">

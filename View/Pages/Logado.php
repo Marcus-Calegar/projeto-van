@@ -1,7 +1,9 @@
 <?php
 include "../Layout/navmenu.php";
 include_once '../../model/Conexoes.php';
+include '../../model/Login.php';
 session_start();
+$seguranca = isset($_SESSION['ativa']) ? TRUE : header("Location: ../../model/Login.php?LogOut=1");
 $id = $_SESSION['id'];
 $tabela = $_SESSION['user'];
 
@@ -11,8 +13,8 @@ try {
     $stmt = $conn->comando($sql);
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (\Throwable $th) {
-    throw new PDOException('Erro ao conectar ao banco de dados ' . $th);
+} catch (\Exception $th) {
+    throw new Exception('Erro ao conectar ao banco de dados ' . $th);
 } finally {
     $conn = null;
 }
@@ -30,6 +32,8 @@ try {
     <h3>ID: <?= $id ?></h3>
     <h3>Nome: <?= $result[0]['nome'] ?></h3>
     <p>Voce e: <?= $tabela ?></p>
+    <a href="Perfil.php" class="btn btn-primary">Meu Perfil</a>
+    <a class="btn btn-danger" onclick="return confirm('Tem certeza que deseja sair?')" href="../../model/Login.php?LogOut=1">Sair</a>
     <?php
     if ($tabela == 'Responsavel') : ?>
         <div class="text-center">

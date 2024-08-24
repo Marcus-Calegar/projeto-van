@@ -1,6 +1,6 @@
 <?php
 require_once 'Conexoes.php';
-require_once '../Controller/MotoristaController.php';
+include_once dirname(__FILE__) . '/../Controller/MotoristaController.php';
 class Motorista
 {
     private function ValidarPOST($post)
@@ -87,6 +87,20 @@ class Motorista
             $conn = null;
         }
     }
+    public function EncontrarMotorista($id)
+    {
+        try {
+            $conn = new Conexao();
+            $stmt = $conn->comando('SELECT * FROM Motorista WHERE idMotorista = ' . $id);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } catch (\Throwable $th) {
+            throw $th;
+        } finally {
+            $conn = null;
+        }
+    }
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -95,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         case 'inserir':
             $motorista = new Motorista();
             $motorista->Inserir();
-            header('Location: ../View/Pages/Logado.php');
+            header('Location: ../View/Pages/Login.php');
             break;
     }
 }

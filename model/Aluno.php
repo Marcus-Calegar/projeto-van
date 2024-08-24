@@ -96,7 +96,7 @@ class Aluno
             $conn = null;
         }
     }
-    public function MostrarAluno_Id($idAluno, $idResponsavel)
+    public function ListarAlunoResponsavel($idAluno, $idResponsavel)
     {
         try {
             $conn = new Conexao();
@@ -149,6 +149,20 @@ class Aluno
             $stmt->execute();
         } catch (\Exception $e) {
             throw $e;
+        } finally {
+            $conn = null;
+        }
+    }
+    public function EncontrarAluno($id)
+    {
+        try {
+            $conn = new Conexao();
+            $stmt = $conn->comando('SELECT * FROM Aluno WHERE idAluno = ' . $id);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } catch (\Throwable $th) {
+            throw $th;
         } finally {
             $conn = null;
         }
