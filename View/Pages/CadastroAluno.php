@@ -60,7 +60,7 @@ try {
     else :
         include_once(__DIR__ . '/../../model/Aluno.php');
         $a = new Aluno();
-        $aluno = $a->MostrarAluno_Id($_POST['idAluno'], $_POST['idResponsavel']);
+        $aluno = $a->ListarAlunoResponsavel($_POST['idAluno'], $_POST['idResponsavel']);
         foreach ($aluno as $valor) :
         ?>
             <form class="mx-auto" action="/model/Aluno.php" method="post">

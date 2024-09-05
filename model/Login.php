@@ -1,30 +1,27 @@
 <?php
 class Login
 {
-    public function Logar()
+    public static function Logar()
     {
         $email = $_POST['email'];
         $senha = $_POST['senha'];
 
         if ($_POST['User'] == 'Aluno') {
             include 'Aluno.php';
-            $a = new Aluno();
-            if ($a->Logar($email, $senha))
+            if (Aluno::Logar($email, $senha))
                 return true;
         } else if ($_POST['User'] == 'Responsavel') {
             include 'Responsavel.php';
-            $r = new Responsavel();
-            if ($r->Logar($email, $senha))
+            if (Responsavel::Logar($email, $senha))
                 return true;
         } else if ($_POST['User'] == 'Motorista') {
             include 'Motorista.php';
-            $m = new Motorista();
-            if ($m->Logar($email, $senha))
+            if (Motorista::Logar($email, $senha))
                 return true;
         }
         return false;
     }
-    public function LogOut()
+    public static function LogOut()
     {
         session_start();
         session_unset();
@@ -32,15 +29,16 @@ class Login
         header("Location: ../../index.php");
     }
 }
-$log = new Login();
 if (!isset($_GET['LogOut'])) {
     if (isset($_POST['LogIn'])) {
-        if ($log->Logar()) {
+        if (Login::Logar()) {
             unset($_POST['LogIn']);
             $_SESSION['ativa'] = true;
             header("Location: ../View/Pages/Logado.php");
+        } else {
+            header("Location: ../View/Pages/Login.php");
         }
     }
 } else {
-    $log->LogOut();
+    Login::LogOut();
 }

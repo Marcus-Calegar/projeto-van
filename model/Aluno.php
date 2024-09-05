@@ -55,7 +55,7 @@ class Aluno
             $conn = null;
         }
     }
-    public function Logar($email, $senha)
+    public static function Logar($email, $senha)
     {
         try {
             $conn = new Conexao();
@@ -153,7 +153,7 @@ class Aluno
             $conn = null;
         }
     }
-    public function EncontrarAluno($id)
+    public static function EncontrarAluno($id)
     {
         try {
             $conn = new Conexao();
@@ -161,6 +161,19 @@ class Aluno
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $result;
+        } catch (\Throwable $th) {
+            throw $th;
+        } finally {
+            $conn = null;
+        }
+    }
+    public static function ExcluirPerfil($id)
+    {
+        try {
+            $conn = new Conexao();
+            $stmt = $conn->comando('DELETE FROM Aluno WHERE idAluno = ' . $id);
+            $stmt->execute();
+            return true;
         } catch (\Throwable $th) {
             throw $th;
         } finally {
@@ -185,6 +198,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $aluno = new Aluno();
             $aluno->Atualizar($_POST);
             header('Location: ../View/Pages/Logado.php?Sucesso=1');
+            break;
+        case 'excluirPerfil':
+            include 'Login.php';
+            if (Aluno::ExcluirPerfil($_POST['id']) != true)
+                echo "Nao foi possivel excluir";
+            header('Location: ../View/Pages/Logado.php');
+            Login::LogOut();
             break;
     }
 }

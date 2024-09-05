@@ -12,13 +12,13 @@ class Motorista
         }
         return true;
     }
-    public function Inserir()
+    public static function Inserir()
     {
         try {
             $conn = new Conexao();
             $motorista = new MotoristaController();
 
-            if ($this->ValidarPOST($_POST)) {
+            if (self::ValidarPOST($_POST)) {
                 $motorista->setNome($_POST['nome']);
                 $motorista->setTelefone($_POST['telefone']);
                 $motorista->setCpf($_POST['cpf']);
@@ -56,7 +56,7 @@ class Motorista
             $conn = null;
         }
     }
-    public function Logar($email, $senha)
+    public static function Logar($email, $senha)
     {
         try {
             $conn = new Conexao();
@@ -87,7 +87,7 @@ class Motorista
             $conn = null;
         }
     }
-    public function EncontrarMotorista($id)
+    public static function EncontrarMotorista($id)
     {
         try {
             $conn = new Conexao();
@@ -101,15 +101,34 @@ class Motorista
             $conn = null;
         }
     }
+    public static function ExcluirPerfil($id)
+    {
+        try {
+            $conn = new Conexao();
+            $stmt = $conn->comando('DELETE FROM Motorista WHERE idMotorista = ' . $id);
+            $stmt->execute();
+            return true;
+        } catch (\Throwable $th) {
+            throw $th;
+        } finally {
+            $conn = null;
+        }
+    }
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $action = $_POST['action'];
     switch ($action) {
         case 'inserir':
-            $motorista = new Motorista();
-            $motorista->Inserir();
+            Motorista::Inserir();
             header('Location: ../View/Pages/Login.php');
+            break;
+        case 'excluirPerfil':
+            include 'Login.php';
+            if (Motorista::ExcluirPerfil($_POST['id']) != true)
+                echo "Voce possui veiculos cadastrados";
+                header('Location: ../View/Pages/Logado.php');
+            Login::LogOut();
             break;
     }
 }

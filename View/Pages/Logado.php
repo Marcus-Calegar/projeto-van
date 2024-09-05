@@ -14,7 +14,7 @@ try {
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (\Exception $th) {
-    throw new Exception('Erro ao conectar ao banco de dados ' . $th);
+    echo ('Erro ao conectar ao banco de dados ' . $th);
 } finally {
     $conn = null;
 }
