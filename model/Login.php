@@ -1,20 +1,20 @@
 <?php
 class Login
 {
-    public static function Logar()
+    public static function Logar($data)
     {
-        $email = $_POST['email'];
-        $senha = $_POST['senha'];
+        $email = $data['email'];
+        $senha = $data['senha'];
 
-        if ($_POST['User'] == 'Aluno') {
+        if ($data['User'] == 'Aluno') {
             include 'Aluno.php';
             if (Aluno::Logar($email, $senha))
                 return true;
-        } else if ($_POST['User'] == 'Responsavel') {
+        } else if ($data['User'] == 'Responsavel') {
             include 'Responsavel.php';
             if (Responsavel::Logar($email, $senha))
                 return true;
-        } else if ($_POST['User'] == 'Motorista') {
+        } else if ($data['User'] == 'Motorista') {
             include 'Motorista.php';
             if (Motorista::Logar($email, $senha))
                 return true;
@@ -28,17 +28,18 @@ class Login
         session_destroy();
         header("Location: ../../index.php");
     }
-}
-if (!isset($_GET['LogOut'])) {
-    if (isset($_POST['LogIn'])) {
-        if (Login::Logar()) {
-            unset($_POST['LogIn']);
-            $_SESSION['ativa'] = true;
-            header("Location: ../View/Pages/Logado.php");
-        } else {
-            header("Location: ../View/Pages/Login.php");
+    public static function IniciarPerfil($tabela, $id){
+        try {
+            $conn = new Conexao();
+            $sql = "SELECT * FROM $tabela WHERE id{$tabela} = '$id'";
+            $stmt = $conn->comando($sql);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } catch (\Exception $th) {
+            echo ('Erro ao conectar ao banco de dados ' . $th);
+        } finally {
+            $conn = null;
         }
     }
-} else {
-    Login::LogOut();
 }

@@ -11,7 +11,7 @@ include "../Layout/navmenu.php";
 </head>
 
 <body>
-    <form class="mx-auto" action="/model/Motorista.php" method="post">
+    <form class="mx-auto" action="/Controller/MotoristaController.php" method="post">
         <input type="text" hidden name="action" value="inserir">
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Nome</label>

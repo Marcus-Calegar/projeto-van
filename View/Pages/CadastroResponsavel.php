@@ -11,7 +11,7 @@ include "../Layout/navmenu.php";
 </head>
 
 <body>
-    <form class="mx-auto" action="/model/Responsavel.php" method="post">
+    <form class="mx-auto" action="/Controller/ResponsavelController.php" method="post">
         <input type="text" hidden name="action" value="inserir">
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Nome</label>

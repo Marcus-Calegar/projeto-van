@@ -14,7 +14,7 @@ include "../Layout/navmenu.php";
     <div class="d-flex flex-wrap justify-content-center align-items-center">
         <div class="m-5">
             <h4 class="mb-2">Entrar em uma conta</h4>
-            <form class="d-flex flex-column align-items-center" action="/model/Login.php" method="post">
+            <form class="d-flex flex-column align-items-center" action="/Controller/LoginController.php" method="post">
                 <div class="mb-3">
                     <select class="form-select" id="cmbUsers">
                         <option selected>Tipo de usuario</option>

@@ -6,18 +6,7 @@ session_start();
 $seguranca = isset($_SESSION['ativa']) ? TRUE : header("Location: ../../model/Login.php?LogOut=1");
 $id = $_SESSION['id'];
 $tabela = $_SESSION['user'];
-
-try {
-    $conn = new Conexao();
-    $sql = "SELECT * FROM $tabela WHERE id{$tabela} = '$id'";
-    $stmt = $conn->comando($sql);
-    $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (\Exception $th) {
-    echo ('Erro ao conectar ao banco de dados ' . $th);
-} finally {
-    $conn = null;
-}
+$result = Login::IniciarPerfil($tabela, $id);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,12 +22,12 @@ try {
     <h3>Nome: <?= $result[0]['nome'] ?></h3>
     <p>Voce e: <?= $tabela ?></p>
     <a href="Perfil.php" class="btn btn-primary">Meu Perfil</a>
-    <a class="btn btn-danger" onclick="return confirm('Tem certeza que deseja sair?')" href="../../model/Login.php?LogOut=1">Sair</a>
+    <a class="btn btn-danger" onclick="return confirm('Tem certeza que deseja sair?')" href="../../Controller/LoginController.php?LogOut=1">Sair</a>
     <?php
     if ($tabela == 'Responsavel') : ?>
         <div class="text-center">
             <h2>Cadastrar Dependente</h2>
-            <a href="CadastroALuno.php?id=<?= $id ?>" class="btn btn-primary">Cadastrar</a>
+            <a href="CadastroAluno.php?id=<?= $id ?>" class="btn btn-primary">Cadastrar</a>
             <div class="table-responsive-md">
                 <table class="table table-striped m-2">
                     <thead>
@@ -81,7 +70,7 @@ try {
                                         </form>
                                     </td>
                                     <td>
-                                        <form action="/model/Aluno.php" method="post" onclick="return confirm('Tem certeza que deseja excluir o dependete?')">
+                                        <form action="/Controller/AlunoController.php" method="post" onclick="return confirm('Tem certeza que deseja excluir o dependete?')">
                                             <button type="submit" class="btn btn-danger">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
@@ -153,7 +142,7 @@ try {
                                         </a>
                                     </td>
                                     <td>
-                                        <form action="/model/Veiculo.php" method="post" onclick="return confirm('Tem certeza que deseja excluir o veiculo?')">
+                                        <form action="/Controller/VeiculoController.php" method="post" onclick="return confirm('Tem certeza que deseja excluir o veiculo?')">
                                             <button type="submit" class="btn btn-danger">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />

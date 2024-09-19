@@ -1,44 +1,34 @@
 <?php
 require_once 'Conexoes.php';
-include_once dirname(__FILE__) . '/../Controller/MotoristaController.php';
-class Motorista
+include __DIR__ . '/../Interfaces/IUser.php';
+class Motorista implements IUser
 {
-    private function ValidarPOST($post)
+    public static function setDataNascimento($dataNascimento)
     {
-        foreach ($post as $value) {
-            if (empty($value)) {
-                return false;
-            }
-        }
-        return true;
+        $date = DateTime::createFromFormat('Y-m-d', $dataNascimento);
+        if ($date && $date->format('Y-m-d') === $dataNascimento)
+            $formattedDate = $date->format('Y-m-d'); // Formato YYYY-MM-DD para MySQL
+        return $formattedDate;
     }
-    public static function Inserir()
+    public static function setSenha($senha)
+    {
+        return password_hash($senha, PASSWORD_DEFAULT);
+    }
+    public function Inserir($data)
     {
         try {
             $conn = new Conexao();
-            $motorista = new MotoristaController();
 
-            if (self::ValidarPOST($_POST)) {
-                $motorista->setNome($_POST['nome']);
-                $motorista->setTelefone($_POST['telefone']);
-                $motorista->setCpf($_POST['cpf']);
-                $motorista->setMensalidade($_POST['mensalidade']);
-                $motorista->setDataNascimento($_POST['dataNascimento']);
-                $motorista->setEmail($_POST['email']);
-                $motorista->setSenha($_POST['senha']);
-            } else {
-                return false;
-            }
             $sql = "INSERT INTO Motorista (nome, telefone, cpf, mensalidade, dataNascimento, email, senha) VALUES (:nome, :telefone, :cpf, :mensalidade, :dataNascimento, :email, :senha)";
             $stmt = $conn->preparar($sql);
 
-            $nome = $motorista->getNome();
-            $telefone = $motorista->getTelefone();
-            $cpf = $motorista->getCpf();
-            $mensalidade = $motorista->getMensalidade();
-            $dataNascimento = $motorista->getDataNascimento();
-            $email = $motorista->getEmail();
-            $senha = $motorista->getSenha();
+            $nome = $data['nome'];
+            $telefone = $data['telefone'];
+            $cpf = $data['cpf'];
+            $mensalidade = $data['mensalidade'];
+            $dataNascimento = self::setDataNascimento($data['dataNascimento']);
+            $email = $data['email'];
+            $senha = self::setSenha($data['senha']);
 
             $stmt->bindParam(':nome', $nome);
             $stmt->bindParam(':telefone', $telefone);
@@ -56,31 +46,64 @@ class Motorista
             $conn = null;
         }
     }
+    public function Atualizar($data)
+    {
+        try {
+            $conn = new Conexao();
+            if (isset($_POST['ModificarSenha'])) {
+                $sql = "UPDATE `Motorista` SET `nome` = :nome, `telefone` = :telefone, `cpf` = :cpf, `mensalidade` = :mensalidade, `dataNascimento` = :dataNascimento, `email` = :email, `senha` = :senha WHERE idMotorista = :id";
+                $stmt = $conn->preparar($sql);
+                $senha = self::setSenha($data['senha']);
+                $stmt->bindParam(':senha', $senha);
+            } else {
+                $sql = "UPDATE `Motorista` SET `nome` = :nome, `telefone` = :telefone, `cpf` = :cpf, `mensalidade` = :mensalidade, `dataNascimento` = :dataNascimento, `email` = :email WHERE idMotorista = :id";
+                $stmt = $conn->preparar($sql);
+            }
+
+            $nome = $data['nome'];
+            $telefone = $data['telefone'];
+            $cpf = $data['cpf'];
+            $mensalidade = $data['mensalidade'];
+            $dataNascimento = self::setDataNascimento($data['dataNascimento']);
+            $email = $data['email'];
+            $id = $data['id'];
+
+            $stmt->bindParam(':nome', $nome);
+            $stmt->bindParam(':telefone', $telefone);
+            $stmt->bindParam(':cpf', $cpf);
+            $stmt->bindParam(':mensalidade', $mensalidade);
+            $stmt->bindParam(':dataNascimento', $dataNascimento);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+        } catch (\Throwable $th) {
+            throw $th;
+        } finally {
+            $conn = null;
+        }
+    }
     public static function Logar($email, $senha)
     {
         try {
             $conn = new Conexao();
-            $motorista = new MotoristaController();
 
-            $sql = "SELECT * FROM `motorista` WHERE email = :email";
+            $sql = "SELECT idMotorista, senha FROM `motorista` WHERE email = :email";
             $stmt = $conn->preparar($sql);
             $stmt->bindParam(':email', $email);
             $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             if ($stmt->rowCount() > 0) {
-                $motorista->setIdMotorista($result[0]['idMotorista']);
+                $id = $result[0]['idMotorista'];
                 $senhaCriptografada = $result[0]['senha'];
-                $id = $motorista->getIdMotorista();
                 if (password_verify($senha, $senhaCriptografada)) {
                     session_start();
                     $_SESSION['id'] = $id;
                     $_SESSION['user'] = 'Motorista';
                     return true;
                 }
-            } else {
+            } else
                 return false;
-            }
         } catch (\PDOException $e) {
             throw $e;
         } finally {
@@ -113,22 +136,5 @@ class Motorista
         } finally {
             $conn = null;
         }
-    }
-}
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $action = $_POST['action'];
-    switch ($action) {
-        case 'inserir':
-            Motorista::Inserir();
-            header('Location: ../View/Pages/Login.php');
-            break;
-        case 'excluirPerfil':
-            include 'Login.php';
-            if (Motorista::ExcluirPerfil($_POST['id']) != true)
-                echo "Voce possui veiculos cadastrados";
-                header('Location: ../View/Pages/Logado.php');
-            Login::LogOut();
-            break;
     }
 }

@@ -24,7 +24,7 @@ try {
 
 <body>
     <?php if (!isset($_GET['Update'])) : ?>
-        <form class="mx-auto" action="/model/Aluno.php" method="POST">
+        <form class="mx-auto" action="/Controller/AlunoController.php" method="POST">
             <input type="text" hidden name="action" value="inserir">
             <input type="text" hidden name="idResponsavel" value="<?= $_GET['id'] ?>">
             <div class="mb-3">
@@ -63,7 +63,7 @@ try {
         $aluno = $a->ListarAlunoResponsavel($_POST['idAluno'], $_POST['idResponsavel']);
         foreach ($aluno as $valor) :
         ?>
-            <form class="mx-auto" action="/model/Aluno.php" method="post">
+            <form class="mx-auto" action="/Controller/AlunoController.php" method="post">
                 <input type="text" hidden name="action" value="atualizar">
                 <input type="text" hidden name="idResponsavel" value="<?= $_POST['idResponsavel'] ?>">
                 <input type="text" hidden name="idAluno" value="<?= $_POST['idAluno'] ?>">

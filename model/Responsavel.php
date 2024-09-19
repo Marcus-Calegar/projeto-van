@@ -1,42 +1,33 @@
 <?php
 require_once 'Conexoes.php';
-require_once __DIR__ . '/../Controller/ResponsavelController.php';
-class Responsavel
+include __DIR__ . '/../Interfaces/IUser.php';
+class Responsavel implements IUser
 {
-    private function ValidarPOST($post)
+    public static function setDataNascimento($dataNascimento)
     {
-        foreach ($post as $value) {
-            if (empty($value)) {
-                return false;
-            }
-        }
-        return true;
+        $date = DateTime::createFromFormat('Y-m-d', $dataNascimento);
+        if ($date && $date->format('Y-m-d') === $dataNascimento)
+            $formattedDate = $date->format('Y-m-d'); // Formato YYYY-MM-DD para MySQL
+        return $formattedDate;
     }
-    public function Inserir()
+    public static function setSenha($senha)
+    {
+        return password_hash($senha, PASSWORD_DEFAULT);
+    }
+    public function Inserir($data)
     {
         try {
             $conn = new Conexao();
-            $responsavel = new ResponsavelController();
 
-            if ($this->ValidarPOST($_POST)) {
-                $responsavel->setNome($_POST['nome']);
-                $responsavel->setTelefone($_POST['telefone']);
-                $responsavel->setCpf($_POST['cpf']);
-                $responsavel->setEmail($_POST['email']);
-                $responsavel->setSenha($_POST['senha']);
-                $responsavel->setDataNascimento($_POST['dataNascimento']);
-            } else {
-                return false;
-            }
             $sql = "INSERT INTO Responsavel (nome, telefone, cpf, dataNascimento, email, senha) VALUES (:nome, :telefone, :cpf, :dataNascimento, :email, :senha)";
             $stmt = $conn->preparar($sql);
 
-            $nome = $responsavel->getNome();
-            $telefone = $responsavel->getTelefone();
-            $cpf = $responsavel->getCpf();
-            $dataNascimento = $responsavel->getDataNascimento();
-            $email = $responsavel->getEmail();
-            $senha = $responsavel->getSenha();
+            $nome = $data['nome'];
+            $telefone = $data['telefone'];
+            $cpf = $data['cpf'];
+            $dataNascimento = self::setDataNascimento($data['dataNascimento']);
+            $email = $data['email'];
+            $senha = self::setSenha($data['senha']);
 
             $stmt->bindParam(':nome', $nome);
             $stmt->bindParam(':telefone', $telefone);
@@ -49,6 +40,7 @@ class Responsavel
             return true;
         } catch (\Throwable $th) {
             throw $th;
+            return false;
         } finally {
             $conn = null;
         }
@@ -57,7 +49,6 @@ class Responsavel
     {
         try {
             $conn = new Conexao();
-            $responsavel = new ResponsavelController();
 
             $sql = "SELECT idResponsavel, senha FROM `responsavel` WHERE email = :email";
             $stmt = $conn->preparar($sql);
@@ -66,8 +57,7 @@ class Responsavel
 
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             if ($stmt->rowCount() > 0) {
-                $responsavel->setIdResponsavel($result[0]['idResponsavel']);
-                $id = $responsavel->getIdResponsavel();
+                $id = $result[0]['idResponsavel'];
                 $senhaCriptografada = $result[0]['senha'];
                 if (password_verify($senha, $senhaCriptografada)) {
                     session_start();
@@ -75,9 +65,8 @@ class Responsavel
                     $_SESSION['user'] = 'Responsavel';
                     return true;
                 }
-            } else {
+            } else
                 return false;
-            }
         } catch (\PDOException $e) {
             throw $e;
         } finally {
@@ -121,41 +110,27 @@ class Responsavel
             $conn = null;
         }
     }
-    public function Atualizar()
+    public function Atualizar($data)
     {
         try {
             $conn = new Conexao();
-            $responsavel = new ResponsavelController();
 
-            if ($this->ValidarPOST($_POST)) {
-                $responsavel->setNome($_POST['nome']);
-                $responsavel->setTelefone($_POST['telefone']);
-                $responsavel->setCpf($_POST['cpf']);
-                $responsavel->setEmail($_POST['email']);
-                $responsavel->setDataNascimento($_POST['dataNascimento']);
-                $responsavel->setIdResponsavel($_POST['id']);
-                if (isset($_POST['ModificarSenha']))
-                    $responsavel->setSenha($_POST['senha']);
-            } else {
-                return false;
-            }
             if (isset($_POST['ModificarSenha'])) {
                 $sql = "UPDATE `Responsavel` SET `nome` = :nome, `telefone` = :telefone, `cpf` = :cpf, `email` = :email, `senha` = :senha, `dataNascimento` = :dataNascimento WHERE `idResponsavel` = :id";
                 $stmt = $conn->preparar($sql);
-                $senha = $responsavel->getSenha();
+                $senha = $data['senha'];
                 $stmt->bindParam(':senha', $senha);
             } else {
                 $sql = "UPDATE `Responsavel` SET `nome` = :nome, `telefone` = :telefone, `cpf` = :cpf, `email` = :email, `dataNascimento` = :dataNascimento WHERE `idResponsavel` = :id";
                 $stmt = $conn->preparar($sql);
             }
 
-
-            $nome = $responsavel->getNome();
-            $telefone = $responsavel->getTelefone();
-            $cpf = $responsavel->getCpf();
-            $dataNascimento = $responsavel->getDataNascimento();
-            $email = $responsavel->getEmail();
-            $id = $responsavel->getIdResponsavel();
+            $nome = $data['nome'];
+            $telefone = $data['telefone'];
+            $cpf = $data['cpf'];
+            $dataNascimento = self::setDataNascimento($data['dataNascimento']);
+            $email = $data['email'];
+            $id = $data['id'];
 
 
             $stmt->bindParam(':nome', $nome);
@@ -169,24 +144,22 @@ class Responsavel
             return true;
         } catch (\Throwable $th) {
             throw $th;
+            return false;
         } finally {
             $conn = null;
         }
     }
-}
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $action = $_POST['action'];
-    switch ($action) {
-        case 'inserir':
-            $responsavel = new Responsavel();
-            $responsavel->Inserir();
-            header('Location: ../View/Pages/Login.php');
-            break;
-        case 'atualizar':
-            $responsavel = new Responsavel();
-            $responsavel->Atualizar();
-            header('Location: ../View/Pages/Logado.php');
-            break;
+    public static function ExcluirPerfil($id)
+    {
+        try {
+            $conn = new Conexao();
+            $stmt = $conn->comando('DELETE FROM Motorista WHERE idMotorista = ' . $id);
+            $stmt->execute();
+            return true;
+        } catch (\Throwable $th) {
+            throw $th;
+        } finally {
+            $conn = null;
+        }
     }
 }

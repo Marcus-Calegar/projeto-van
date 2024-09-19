@@ -13,7 +13,7 @@ include_once '../../model/Conexoes.php';
 
 <body>
     <?php if (!isset($_GET['Update'])) : ?>
-        <form class="mx-auto" action="/model/Veiculo.php" method="post">
+        <form class="mx-auto" action="/Controller/VeiculoController.php" method="post">
             <input type="text" hidden name="action" value="inserir">
             <input type="text" hidden name="idMotorista" value="<?= $_POST['idMotorista'] ?>">
             <div class="mb-3">
@@ -45,7 +45,7 @@ include_once '../../model/Conexoes.php';
         $veiculo = $v->MostrarVeiculos_idVeic($_POST['idMotorista'], $_POST['idVeiculo']);
         foreach ($veiculo as $value) :
         ?>
-            <form class="mx-auto" action="/model/Veiculo.php" method="post">
+            <form class="mx-auto" action="/Controller/VeiculoController.php" method="post">
                 <input type="text" hidden name="action" value="atualizar">
                 <input type="text" hidden name="idMotorista" value="<?= $_POST['idMotorista'] ?>">
                 <input type="text" hidden name="idVeiculo" value="<?= $_POST['idVeiculo'] ?>">

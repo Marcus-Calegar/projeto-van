@@ -74,7 +74,7 @@ $informacoes = $informacoes[0];
     <div class="d-flex">
         <a href="Logado.php" class="btn btn-primary mx-2">Voltar</a>
         <a href="EditarPerfil.php" class="btn btn-warning mx-2">Editar Perfil</a>
-        <form action="../../model/<?= $_SESSION['user'] ?>.php" method="post">
+        <form action="/Controller/<?= $_SESSION['user'] ?>Controller.php" method="post">
             <input type="hidden" name="id" value="<?= $_SESSION['id'] ?>">
             <input type="hidden" name="action" value="excluirPerfil">
             <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir Perfil</button>
