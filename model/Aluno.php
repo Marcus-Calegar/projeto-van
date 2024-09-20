@@ -1,7 +1,19 @@
 <?php
 require_once 'Conexoes.php';
-class Aluno
+include __DIR__ . '/../Interfaces/IUser.php';
+class Aluno implements IUser
 {
+    public static function setDataNascimento($dataNascimento)
+    {
+        $date = DateTime::createFromFormat('Y-m-d', $dataNascimento);
+        if ($date && $date->format('Y-m-d') === $dataNascimento)
+            $formattedDate = $date->format('Y-m-d'); // Formato YYYY-MM-DD para MySQL
+        return $formattedDate;
+    }
+    public static function setSenha($senha)
+    {
+        return password_hash($senha, PASSWORD_DEFAULT);
+    }
     public function Inserir($data)
     {
         try {
@@ -11,10 +23,10 @@ class Aluno
             $stmt = $conn->preparar($sql);
 
             $nome = $data['nome'];
-            $dataNascimento = $data['dataNascimento'];
+            $dataNascimento = self::setDataNascimento($data['dataNascimento']);
             $idResponsavel = $data['idResponsavel'];
             $idEscola = $data['idEscola'];
-            $senha = $data['senha'];
+            $senha = self::setSenha($data['senha']);
             $email = $data['email'];
 
             $stmt->bindParam(':nome', $nome);
@@ -93,17 +105,18 @@ class Aluno
 
             if (isset($data['ModificarSenha'])) {
                 $stmt = $conn->preparar("UPDATE Aluno SET nome = :nome, dataNascimento = :dataNascimento, idEscola = :escola, email = :email, senha = :senha WHERE idResponsavel = :idResponsavel AND idAluno = :idAluno");
-                $senha = $data['senha'];
+                $senha = self::setSenha($data['senha']);
                 $stmt->bindParam(':senha', $senha);
-            } else
+            } else {
                 $stmt = $conn->preparar("UPDATE Aluno SET nome = :nome, dataNascimento = :dataNascimento, idEscola = :escola, email = :email WHERE idResponsavel = :idResponsavel AND idAluno = :idAluno");
+            }
 
             $nome = $data['nome'];
-            $dataNascimento = $data['dataNascimento'];
+            $dataNascimento = self::setDataNascimento($data['dataNascimento']);
             $escola = $data['idEscola'];
             $email = $data['email'];
             $idResponsavel = $data['idResponsavel'];
-            $idAluno = $data['idAluno'];
+            $idAluno = $data['id'];
 
             $stmt->bindParam(':nome', $nome);
             $stmt->bindParam(':dataNascimento', $dataNascimento);
@@ -141,9 +154,9 @@ class Aluno
             return true;
         } catch (\Throwable $th) {
             throw $th;
+            return false;
         } finally {
             $conn = null;
         }
     }
 }
-

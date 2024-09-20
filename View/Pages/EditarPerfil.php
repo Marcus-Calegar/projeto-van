@@ -116,7 +116,48 @@ $informacoes = $informacoes[0];
     endif;
     if ($_SESSION['user'] == 'Aluno') :
     ?>
-
+        <form class="mx-auto" action="/Controller/AlunoController.php" method="post">
+            <input type="text" hidden name="action" value="atualizar">
+            <input type="text" hidden name="id" value="<?= $_SESSION['id'] ?>">
+            <input type="text" hidden name="idResponsavel" value="<?= $informacoes['idResponsavel']?>">
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Nome</label>
+                <input type="text" class="form-control" name="nome" value="<?= $informacoes['nome'] ?>">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Data de Nascimento</label>
+                <input type="date" class="form-control" name="dataNascimento" value="<?= $informacoes['dataNascimento'] ?>">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" value="<?= $informacoes['email'] ?>">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Escola</label>
+                <select name="idEscola" class="form-select">
+                    <?php
+                    include_once '../../model/Escola.php';
+                    $escolas = Escola::PesquisarEscolas();
+                    foreach ($escolas as $value) :
+                    ?>
+                        <option value="<?= $value['idEscola'] ?>" <?= $value['idEscola'] == $informacoes['idEscola'] ? 'selected' : ''; ?>><?= $value['nome'] ?></option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+            <div class="mb-3">
+                <input type="checkbox" id="ModificarSenha" name="ModificarSenha">
+                <label for="ModificarSenha">Alterar Senha</label>
+                <div id="DivSenha" style="display: none;">
+                    <label class="form-label">Senha</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" name="senha" id="Senha" disabled>
+                        <button class="btn btn-outline-secondary" id="BtnMostrarSenha" type="button">Mostrar</button>
+                    </div>
+                </div>
+            </div>
+            <a href="Perfil.php" class="btn btn-primary">Voltar</a>
+            <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
     <?php
     endif;
     ?>

@@ -13,5 +13,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $responsavel->Atualizar($_POST);
             header('Location: ../View/Pages/Logado.php');
             break;
+        case 'excluirPerfil':
+            include __DIR__ . '/../model/Login.php';
+            if (Responsavel::ExcluirPerfil($_POST['id']) != true) {
+                header('Location: ../View/Pages/Logado.php');
+            } else
+                Login::LogOut();
+            break;
     }
 }

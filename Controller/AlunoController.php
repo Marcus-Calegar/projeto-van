@@ -19,11 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header('Location: ../View/Pages/Logado.php?cod=3');
             break;
         case 'excluirPerfil':
-            include 'Login.php';
-            if (Aluno::ExcluirPerfil($_POST['id']) != true)
+            include __DIR__ . '/../model/Login.php';
+            if (Aluno::ExcluirPerfil($_POST['id']) != true) {
+                header('Location: ../View/Pages/Logado.php');
                 echo "Nao foi possivel excluir";
-            header('Location: ../index.php');
-            Login::LogOut();
+            } else
+                Login::LogOut();
             break;
     }
 }

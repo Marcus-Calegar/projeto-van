@@ -153,11 +153,11 @@ class Responsavel implements IUser
     {
         try {
             $conn = new Conexao();
-            $stmt = $conn->comando('DELETE FROM Motorista WHERE idMotorista = ' . $id);
+            $stmt = $conn->comando('DELETE FROM Responsavel WHERE idResponsavel = ' . $id);
             $stmt->execute();
             return true;
         } catch (\Throwable $th) {
-            throw $th;
+            return false;
         } finally {
             $conn = null;
         }

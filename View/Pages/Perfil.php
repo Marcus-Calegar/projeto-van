@@ -1,7 +1,8 @@
 <?php
 include "../Layout/navmenu.php";
-
 session_start();
+$seguranca = isset($_SESSION['ativa']) ? TRUE : header("Location: ../../Controller/LoginController.php?LogOut=1");
+
 if ($_SESSION['user'] == 'Responsavel') {
     include_once '../../model/Responsavel.php';
     $informacoes = Responsavel::EncontrarResponsavel($_SESSION['id']);

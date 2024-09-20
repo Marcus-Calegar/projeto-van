@@ -3,7 +3,7 @@ include "../Layout/navmenu.php";
 include_once '../../model/Conexoes.php';
 include '../../model/Login.php';
 session_start();
-$seguranca = isset($_SESSION['ativa']) ? TRUE : header("Location: ../../model/Login.php?LogOut=1");
+$seguranca = isset($_SESSION['ativa']) ? TRUE : header("Location: ../../Controller/LoginController.php?LogOut=1");
 $id = $_SESSION['id'];
 $tabela = $_SESSION['user'];
 $result = Login::IniciarPerfil($tabela, $id);
