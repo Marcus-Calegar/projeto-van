@@ -18,17 +18,18 @@ class Motorista implements IUser
     {
         try {
             $conn = new Conexao();
-
+      
             $sql = "INSERT INTO Motorista (nome, telefone, cpf, mensalidade, dataNascimento, email, senha) VALUES (:nome, :telefone, :cpf, :mensalidade, :dataNascimento, :email, :senha)";
             $stmt = $conn->preparar($sql);
-
+            
+            $cpf = $data['cpf'];
             $nome = $data['nome'];
             $telefone = $data['telefone'];
-            $cpf = $data['cpf'];
             $mensalidade = $data['mensalidade'];
             $dataNascimento = self::setDataNascimento($data['dataNascimento']);
             $email = $data['email'];
             $senha = self::setSenha($data['senha']);
+            $idEscola = $data['idEscola'];
 
             $stmt->bindParam(':nome', $nome);
             $stmt->bindParam(':telefone', $telefone);
@@ -39,6 +40,7 @@ class Motorista implements IUser
             $stmt->bindParam(':senha', $senha);
             $stmt->execute();
 
+            $this->InserirMotoristaEscola($cpf, $idEscola);
             return true;
         } catch (\Throwable $th) {
             throw $th;
@@ -46,6 +48,22 @@ class Motorista implements IUser
             $conn = null;
         }
     }
+
+    public function InserirMotoristaEscola($cpf, $idEscola){
+        $conn = new Conexao();
+
+        $stmtIdMotorista = $conn->preparar("SELECT idMotorista FROM Motorista WHERE cpf = :cpf");
+        $stmtIdMotorista->bindParam(':cpf', $cpf);
+        $stmtIdMotorista->execute();
+        $linha = $stmtIdMotorista->fetchAll(PDO::FETCH_ASSOC);
+        $idMotorista = $linha[0]['idMotorista'];
+        $stmt = $conn->preparar("INSERT INTO MotoristaEscola(idMotorista, idEscola) VALUES(:idMotorista, :idEscola)");
+        $stmt->bindParam(':idMotorista', $idMotorista);
+
+        $stmt->bindParam(':idEscola', $idEscola);
+        $stmt->execute();
+    }
+
     public function Atualizar($data)
     {
         try {
@@ -114,7 +132,8 @@ class Motorista implements IUser
     {
         try {
             $conn = new Conexao();
-            $stmt = $conn->comando('SELECT * FROM Motorista WHERE idMotorista = ' . $id);
+            $stmt = $conn->preparar('SELECT * FROM Motorista WHERE idMotorista = :id');
+            $stmt->bindParam(':id', $id);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $result;

@@ -21,6 +21,7 @@ $escolas = $escola->PesquisarEscola($_GET['escola']);
             <tr>
                 <th scope="col">Codigo</th>
                 <th scope="col">Escola</th>
+                <th scope="col">Motoristas</th>
             </tr>
         </thead>
         <tbody>
@@ -30,6 +31,7 @@ $escolas = $escola->PesquisarEscola($_GET['escola']);
                 <tr>
                     <th scope="row"><?= $value['idEscola'] ?></th>
                     <td><?= $value['nome'] ?></td>
+                    <td><a href="DetalheEscola.php?id=<?= $value['idEscola'] ?>">Ver Motoristas</a></td>
                 </tr>
             <?php
             endforeach;

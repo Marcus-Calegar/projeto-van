@@ -32,6 +32,13 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/View/Pages/Login.php">Login</a>
                         </li>
+                        <?php
+                        if (isset($_SESSION['ativa'])):
+                            echo '<li class="nav-item">
+                            <a class="nav-link" href="/View/Pages/Logado.php">Perfil</a>
+                        </li>';
+                        endif;
+                        ?>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Area de cadastro
