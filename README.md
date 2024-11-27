@@ -1,66 +1,92 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistema de Montagem de Rotas para Vans Escolares 🚐
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Bem-vindo ao repositório do **Sistema de Montagem de Rotas para Vans Escolares**, um projeto desenvolvido pela equipe **3E1 do Colégio COTEMIG**. Este sistema tem como objetivo proporcionar **facilidade, comodidade e praticidade** para motoristas de transporte escolar, permitindo o planejamento otimizado de rotas e a centralização de funcionalidades essenciais em uma única aplicação.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🎯 **Objetivo do Projeto**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+O projeto busca resolver problemas comuns enfrentados pelos motoristas de vans escolares, como:
+- Dificuldade no planejamento e ajuste de rotas.
+- Atrasos frequentes devido a alterações de última hora.
+- Falta de comunicação eficaz entre motoristas, pais e escolas.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Com nossa solução, oferecemos uma ferramenta **intuitiva e eficiente**, com funcionalidades pensadas para facilitar o dia a dia do motorista.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## ✨ **Funcionalidades Principais**
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- **Planejamento de Rotas Otimizadas:** Utiliza dados de geolocalização e trânsito em tempo real para criar as rotas mais eficientes.
+- **Interface Intuitiva:** Design simples e acessível, facilitando o uso por motoristas com diferentes níveis de experiência tecnológica.
+- **Comunicação em Tempo Real:** Conexão direta entre motoristas, pais e escolas para informar alterações de rotas e horários.
+- **Centralização de Funcionalidades:** Todas as ferramentas essenciais em uma única plataforma, eliminando a necessidade de múltiplas soluções.
+- **Notificações Automatizadas:** Avisos rápidos para situações emergenciais, como atrasos ou mudanças de itinerário.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## 🛠 **Tecnologias Utilizadas**
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+O projeto utiliza as seguintes tecnologias:
 
-### Premium Partners
+### **Backend**
+- **PHP (Laravel):** Framework robusto para desenvolvimento backend e gerenciamento de APIs.
+- **Banco de Dados:** MySQL para armazenamento e organização dos dados.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### **Frontend**
+- **Blade (Laravel):** Ferramenta de template para criação de páginas dinâmicas e responsivas.
 
-## Contributing
+### **Outras Ferramentas**
+- Autenticação integrada (Laravel Breeze).
+- Migrations e Seeders para gerenciamento do banco de dados.
+- APIs de geolocalização para otimização de rotas.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## 🚀 **Como Executar o Projeto**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/Marcus-Calegar/projeto-van
+   ```
 
-## Security Vulnerabilities
+2. Acesse a pasta do projeto:
+   ```bash
+   cd projeto-van
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+3. Instale as dependências do Laravel:
+   ```bash
+   composer install
+   ```
 
-## License
+4. Configure as informações do banco de dados no arquivo `.env`.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+5. Execute as migrations:
+   ```bash
+   php artisan migrate
+   ```
+
+6. Inicie o servidor de desenvolvimento:
+   ```bash
+   php artisan serve
+   ```
+
+7. Acesse o sistema em: **http://localhost:8000**
+
+---
+
+## 👥 **Equipe**
+
+Projeto desenvolvido pela turma **3E1 do Colégio COTEMIG**.  
+**Integrantes:**  
+- Otávio Tadeu Magalhães Ferreira 
+- Matheus Alexandre Oliveira Bernardo  
+- Marcus Vinícius Calegar  
+- João Vitor Ferreira Babeto  
+- Bernardo Fernando Mendes Gomes  
+- Théo Purcino Campelo  
+
+---
+
+Agradecemos por seu interesse no projeto. Esperamos que essa solução traga benefícios reais para motoristas de transporte escolar e suas comunidades. 🚍
